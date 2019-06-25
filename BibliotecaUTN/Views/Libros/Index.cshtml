@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<BibliotecaUTN.Models.Libro>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista";
 }
 
-<h1>Index</h1>
+<h1>Lista</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Agregar nuevo registro</a>
 </p>
 <table class="table">
     <thead>
@@ -46,13 +46,13 @@
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FK_EditorialLibro.IdEditorial)
+                @Html.DisplayFor(modelItem => item.FK_EditorialLibro.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FK_GeneroLibro.IdGenero)
+                @Html.DisplayFor(modelItem => item.FK_GeneroLibro.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FK_PaisLibro.IdPais)
+                @Html.DisplayFor(modelItem => item.FK_PaisLibro.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Año)
@@ -61,9 +61,9 @@
                 @Html.DisplayFor(modelItem => item.Imagen)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdLibro">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdLibro">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdLibro">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IdLibro">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdLibro">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdLibro">Eliminar</a>
             </td>
         </tr>
 }

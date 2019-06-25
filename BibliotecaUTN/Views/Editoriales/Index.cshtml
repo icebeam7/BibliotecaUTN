@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<BibliotecaUTN.Models.Editorial>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista";
 }
 
-<h1>Index</h1>
+<h1>Lista</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Agregar nuevo registro</a>
 </p>
 <table class="table">
     <thead>
@@ -25,9 +25,9 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdEditorial">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdEditorial">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdEditorial">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IdEditorial">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdEditorial">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdEditorial">Eliminar</a>
             </td>
         </tr>
 }

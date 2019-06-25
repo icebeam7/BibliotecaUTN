@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,5 +21,9 @@ namespace BibliotecaUTN.Models
         public bool Activo { get; set; }
 
         public List<Prestamo> Prestamos { get; set; }
+
+        public string IdIdentity { get; set; }
+
+        public string Email { get; set; }
     }
 }

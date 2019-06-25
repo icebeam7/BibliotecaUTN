@@ -15,16 +15,19 @@ namespace BibliotecaUTN.Models
 
         public string Titulo { get; set; }
 
-        [ForeignKey("FK_EditorialLibro")]
+        [ForeignKey("FK_EditorialLibro"), Display(Name = "Editorial")]
         public Guid IdEditorial { get; set; }
+        [Display(Name = "Editorial")]
         public Editorial FK_EditorialLibro { get; set; }
 
-        [ForeignKey("FK_GeneroLibro")]
+        [ForeignKey("FK_GeneroLibro"), Display(Name = "Genero")]
         public Guid IdGenero { get; set; }
+        [Display(Name = "Genero")]
         public Genero FK_GeneroLibro { get; set; }
 
-        [ForeignKey("FK_PaisLibro")]
+        [ForeignKey("FK_PaisLibro"), Display(Name = "Pais")]
         public Guid IdPais { get; set; }
+        [Display(Name = "Pais")]
         public Pais FK_PaisLibro { get; set; }
 
         public int Año { get; set; }

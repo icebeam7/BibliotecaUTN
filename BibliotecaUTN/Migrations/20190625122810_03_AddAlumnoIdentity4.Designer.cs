@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BibliotecaUTN.Migrations
 {
     [DbContext(typeof(BibliotecaContext))]
-    [Migration("20190624110153_01_InitialVersion")]
-    partial class _01_InitialVersion
+    [Migration("20190625122810_03_AddAlumnoIdentity4")]
+    partial class _03_AddAlumnoIdentity4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,6 +25,10 @@ namespace BibliotecaUTN.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Activo");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("IdIdentity");
 
                     b.Property<string>("Matricula");
 

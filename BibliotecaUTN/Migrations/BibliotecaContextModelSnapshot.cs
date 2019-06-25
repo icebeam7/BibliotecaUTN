@@ -24,6 +24,10 @@ namespace BibliotecaUTN.Migrations
 
                     b.Property<bool>("Activo");
 
+                    b.Property<string>("Email");
+
+                    b.Property<string>("IdIdentity");
+
                     b.Property<string>("Matricula");
 
                     b.Property<string>("Nombre");

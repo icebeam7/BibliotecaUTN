@@ -54,7 +54,7 @@ namespace BibliotecaUTN.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdAlumno,Nombre,Matricula,Password,Activo")] Alumno alumno)
+        public async Task<IActionResult> Create([Bind("IdAlumno,Nombre,Matricula,Password,Activo,IdIdentity,Email")] Alumno alumno)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace BibliotecaUTN.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("IdAlumno,Nombre,Matricula,Password,Activo")] Alumno alumno)
+        public async Task<IActionResult> Edit(Guid id, [Bind("IdAlumno,Nombre,Matricula,Password,Activo,IdIdentity,Email")] Alumno alumno)
         {
             if (id != alumno.IdAlumno)
             {

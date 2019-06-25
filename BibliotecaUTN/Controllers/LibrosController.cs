@@ -50,9 +50,9 @@ namespace BibliotecaUTN.Controllers
         // GET: Libros/Create
         public IActionResult Create()
         {
-            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "IdEditorial");
-            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "IdGenero");
-            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "IdPais");
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre");
+            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre");
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre");
             return View();
         }
 
@@ -70,9 +70,9 @@ namespace BibliotecaUTN.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "IdEditorial", libro.IdEditorial);
-            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "IdGenero", libro.IdGenero);
-            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "IdPais", libro.IdPais);
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             return View(libro);
         }
 
@@ -89,9 +89,9 @@ namespace BibliotecaUTN.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "IdEditorial", libro.IdEditorial);
-            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "IdGenero", libro.IdGenero);
-            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "IdPais", libro.IdPais);
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             return View(libro);
         }
 
@@ -127,9 +127,9 @@ namespace BibliotecaUTN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "IdEditorial", libro.IdEditorial);
-            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "IdGenero", libro.IdGenero);
-            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "IdPais", libro.IdPais);
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             return View(libro);
         }
 
