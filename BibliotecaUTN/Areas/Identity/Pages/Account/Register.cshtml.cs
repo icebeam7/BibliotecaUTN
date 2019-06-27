@@ -75,9 +75,10 @@ namespace BibliotecaUTN.Areas.Identity.Pages.Account
                 BibliotecaUTNUser user;
                 var alumno = _context.Alumnos.FirstOrDefault(x => x.Email == Input.Email);
 
+
                 if (alumno != null)
                 {
-                    user = new BibliotecaUTNUser { UserName = alumno.Matricula, Email = Input.Email };
+                    user = new BibliotecaUTNUser { UserName = Input.Email, Email = Input.Email };
                     var result = await _userManager.CreateAsync(user, Input.Password);
 
                     if (result.Succeeded)
@@ -97,7 +98,7 @@ namespace BibliotecaUTN.Areas.Identity.Pages.Account
                         await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                     foreach (var error in result.Errors)

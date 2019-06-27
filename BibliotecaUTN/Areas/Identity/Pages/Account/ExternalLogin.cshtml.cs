@@ -123,7 +123,7 @@ namespace BibliotecaUTN.Areas.Identity.Pages.Account
 
                 if (alumno != null)
                 {
-                    user = new BibliotecaUTNUser { UserName = alumno.Matricula, Email = Input.Email };
+                    user = new BibliotecaUTNUser { UserName = Input.Email, Email = Input.Email };
 
                     var result = await _userManager.CreateAsync(user);
 
@@ -135,7 +135,7 @@ namespace BibliotecaUTN.Areas.Identity.Pages.Account
                             alumno.IdIdentity = user.Id;
                             await _context.SaveChangesAsync();
 
-                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            //await _signInManager.SignInAsync(user, isPersistent: false);
                             _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
                             return LocalRedirect(returnUrl);
                         }

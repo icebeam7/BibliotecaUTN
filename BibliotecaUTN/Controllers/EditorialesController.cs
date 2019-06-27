@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BibliotecaUTN.Context;
 using BibliotecaUTN.Models;
+
+using X.PagedList;
 
 namespace BibliotecaUTN.Controllers
 {
@@ -19,26 +19,59 @@ namespace BibliotecaUTN.Controllers
             _context = context;
         }
 
-        // GET: Editoriales
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int? pageSize, string currentSort)
         {
-            return View(await _context.Editoriales.ToListAsync());
+            ViewBag.CurrentSort = sortOrder ?? currentSort;
+            sortOrder = ViewBag.CurrentSort;
+
+            if (string.IsNullOrEmpty(sortOrder))
+                sortOrder = "nombre";
+
+            ViewBag.SortNombre = ((sortOrder == "nombre") ? "nombre_desc" : "nombre");
+
+            var currentPageSize = pageSize.HasValue ? pageSize.Value : 10;
+            ViewBag.CurrentPageSize = currentPageSize;
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+                pageNumber = 1;
+            else
+                searchString = currentFilter;
+
+            ViewBag.CurrentFilter = searchString;
+
+            var list = await _context.Editoriales.ToListAsync();
+
+            var source = string.IsNullOrWhiteSpace(searchString)
+                ? list
+                : list.Where(x => x.Nombre.ToLower().Contains(searchString.ToLower()));
+
+            switch (sortOrder)
+            {
+                case "nombre":
+                    source = source.OrderBy(x => x.Nombre);
+                    break;
+                case "nombre_desc":
+                    source = source.OrderByDescending(x => x.Nombre);
+                    break;
+            }
+
+            var number = pageNumber ?? 1;
+            return View(new Classes.ClasePagina<Editorial>() { Lista = source.ToPagedList(number, currentPageSize) });
         }
 
         // GET: Editoriales/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index),
+                    new { ac = "El registro no existe", type = "danger" });
 
             var editorial = await _context.Editoriales
                 .FirstOrDefaultAsync(m => m.IdEditorial == id);
+
             if (editorial == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index),
+                    new { ac = "El registro no existe", type = "danger" });
 
             return View(editorial);
         }
@@ -61,8 +94,11 @@ namespace BibliotecaUTN.Controllers
                 editorial.IdEditorial = Guid.NewGuid();
                 _context.Add(editorial);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction(nameof(Index), 
+                    new { ac = "Registro insertado con éxito", type = "success" });
             }
+
             return View(editorial);
         }
 
@@ -70,15 +106,14 @@ namespace BibliotecaUTN.Controllers
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index),
+                    new { ac = "El registro no existe", type = "danger" });
 
             var editorial = await _context.Editoriales.FindAsync(id);
             if (editorial == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index),
+                    new { ac = "El registro no existe", type = "danger" });
+
             return View(editorial);
         }
 
@@ -90,9 +125,8 @@ namespace BibliotecaUTN.Controllers
         public async Task<IActionResult> Edit(Guid id, [Bind("IdEditorial,Nombre")] Editorial editorial)
         {
             if (id != editorial.IdEditorial)
-            {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index),
+                    new { ac = "El registro no existe", type = "danger" });
 
             if (ModelState.IsValid)
             {
@@ -104,15 +138,13 @@ namespace BibliotecaUTN.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!EditorialExists(editorial.IdEditorial))
-                    {
-                        return NotFound();
-                    }
+                        return RedirectToAction(nameof(Index),
+                            new { ac = "El registro no existe", type = "danger" });
                     else
-                    {
-                        throw;
-                    }
+                        return RedirectToAction(nameof(Index),
+                            new { ac = "Error de concurrencia", type = "danger" });
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { ac = "Registro editado con éxito", type = "success" });
             }
             return View(editorial);
         }
@@ -121,16 +153,14 @@ namespace BibliotecaUTN.Controllers
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index),
+                    new { ac = "El registro no existe", type = "danger" });
 
             var editorial = await _context.Editoriales
                 .FirstOrDefaultAsync(m => m.IdEditorial == id);
             if (editorial == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index),
+                    new { ac = "El registro no existe", type = "danger" });
 
             return View(editorial);
         }
@@ -143,7 +173,7 @@ namespace BibliotecaUTN.Controllers
             var editorial = await _context.Editoriales.FindAsync(id);
             _context.Editoriales.Remove(editorial);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { ac = "Registro eliminado con éxito", type = "success" });
         }
 
         private bool EditorialExists(Guid id)

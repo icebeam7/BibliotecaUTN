@@ -10,54 +10,22 @@
     <h4>Prestamo</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FK_LibroPrestamo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FK_LibroPrestamo.IdLibro)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FK_AlumnoPrestamo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FK_AlumnoPrestamo.IdAlumno)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Codigo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Codigo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaPrestamo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaPrestamo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaLimite)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaLimite)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaDevolucion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaDevolucion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FK_StatusPrestamo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FK_StatusPrestamo.IdStatusPrestamo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MontoMulta)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MontoMulta)
-        </dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.FK_LibroPrestamo)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.FK_LibroPrestamo.Titulo)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.FK_AlumnoPrestamo)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.FK_AlumnoPrestamo.Nombre)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Codigo)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Codigo)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.FechaPrestamo)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.FechaPrestamo)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.FechaLimite)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.FechaLimite)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.FechaDevolucion)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.FechaDevolucion)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.FK_StatusPrestamo)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.FK_StatusPrestamo.Nombre)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.MontoMulta)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.MontoMulta)</dd>
     </dl>
 </div>
 <div>

@@ -50,9 +50,9 @@ namespace BibliotecaUTN.Controllers
         // GET: Prestamos/Create
         public IActionResult Create()
         {
-            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "IdAlumno");
-            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "IdLibro");
-            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "IdStatusPrestamo");
+            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "Nombre");
+            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "Titulo");
+            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "Nombre");
             return View();
         }
 
@@ -70,9 +70,9 @@ namespace BibliotecaUTN.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "IdAlumno", prestamo.IdAlumno);
-            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "IdLibro", prestamo.IdLibro);
-            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "IdStatusPrestamo", prestamo.IdStatusPrestamo);
+            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "Nombre", prestamo.IdAlumno);
+            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "Titulo", prestamo.IdLibro);
+            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "Nombre", prestamo.IdStatusPrestamo);
             return View(prestamo);
         }
 
@@ -89,9 +89,9 @@ namespace BibliotecaUTN.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "IdAlumno", prestamo.IdAlumno);
-            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "IdLibro", prestamo.IdLibro);
-            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "IdStatusPrestamo", prestamo.IdStatusPrestamo);
+            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "Nombre", prestamo.IdAlumno);
+            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "Titulo", prestamo.IdLibro);
+            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "Nombre", prestamo.IdStatusPrestamo);
             return View(prestamo);
         }
 
@@ -103,9 +103,7 @@ namespace BibliotecaUTN.Controllers
         public async Task<IActionResult> Edit(Guid id, [Bind("IdPrestamo,IdLibro,IdAlumno,Codigo,FechaPrestamo,FechaLimite,FechaDevolucion,IdStatusPrestamo,MontoMulta")] Prestamo prestamo)
         {
             if (id != prestamo.IdPrestamo)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -117,19 +115,15 @@ namespace BibliotecaUTN.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!PrestamoExists(prestamo.IdPrestamo))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "IdAlumno", prestamo.IdAlumno);
-            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "IdLibro", prestamo.IdLibro);
-            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "IdStatusPrestamo", prestamo.IdStatusPrestamo);
+            ViewData["IdAlumno"] = new SelectList(_context.Alumnos, "IdAlumno", "Nombre", prestamo.IdAlumno);
+            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "Titulo", prestamo.IdLibro);
+            ViewData["IdStatusPrestamo"] = new SelectList(_context.StatusPrestamos, "IdStatusPrestamo", "Nombre", prestamo.IdStatusPrestamo);
             return View(prestamo);
         }
 

@@ -38,6 +38,8 @@ namespace BibliotecaUTN.Controllers
                 .Include(l => l.FK_EditorialLibro)
                 .Include(l => l.FK_GeneroLibro)
                 .Include(l => l.FK_PaisLibro)
+                .Include(l => l.AutoresLibros)
+                    .ThenInclude(l => l.FK_Autor)
                 .FirstOrDefaultAsync(m => m.IdLibro == id);
             if (libro == null)
             {
@@ -80,18 +82,19 @@ namespace BibliotecaUTN.Controllers
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var libro = await _context.Libros.FindAsync(id);
             if (libro == null)
-            {
                 return NotFound();
-            }
+
+            libro.AutoresLibros = await _context.AutoresLibros.Where(
+                x => x.IdLibro == libro.IdLibro).ToListAsync();
+
             ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
             ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
             ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
+            ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
             return View(libro);
         }
 
@@ -102,10 +105,7 @@ namespace BibliotecaUTN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("IdLibro,ISBN,Titulo,IdEditorial,IdGenero,IdPais,Año,Imagen")] Libro libro)
         {
-            if (id != libro.IdLibro)
-            {
-                return NotFound();
-            }
+            if (id != libro.IdLibro) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -116,21 +116,64 @@ namespace BibliotecaUTN.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LibroExists(libro.IdLibro))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!LibroExists(libro.IdLibro)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
             ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
             ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
+            ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
             return View(libro);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAutor(Guid idLibro, Microsoft.AspNetCore.Http.IFormCollection form)
+        {
+            var idAutor = new Guid(form["idAutor"]);
+
+            if (!_context.AutoresLibros.Any(x => x.IdAutor == idAutor && x.IdLibro == idLibro))
+            {
+                var autorLibro = new AutorLibro()
+                {
+                    IdAutor = idAutor,
+                    IdLibro = idLibro
+                };
+
+                _context.AutoresLibros.Add(autorLibro);
+                await _context.SaveChangesAsync();
+            }
+
+            var libro = await _context.Libros.FindAsync(idLibro);
+            libro.AutoresLibros = await _context.AutoresLibros.Where(x => x.IdLibro == libro.IdLibro).ToListAsync();
+
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
+            ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
+            return View("Edit", libro);
+        }
+
+        public async Task<IActionResult> RemoveAutor(Guid idLibro, Guid idAutor)
+        {
+            var autorLibro = _context.AutoresLibros.FirstOrDefault(x => x.IdAutor == idAutor && x.IdLibro == idLibro);
+
+            if (autorLibro != null)
+            {
+                _context.AutoresLibros.Remove(autorLibro);
+                await _context.SaveChangesAsync();
+            }
+
+            var libro = await _context.Libros.FindAsync(idLibro);
+            libro.AutoresLibros = await _context.AutoresLibros.Where(x => x.IdLibro == libro.IdLibro).ToListAsync();
+
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
+            ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
+            return View("Edit", libro);
         }
 
         // GET: Libros/Delete/5
@@ -145,6 +188,8 @@ namespace BibliotecaUTN.Controllers
                 .Include(l => l.FK_EditorialLibro)
                 .Include(l => l.FK_GeneroLibro)
                 .Include(l => l.FK_PaisLibro)
+                .Include(l => l.AutoresLibros)
+                    .ThenInclude(l => l.FK_Autor)
                 .FirstOrDefaultAsync(m => m.IdLibro == id);
             if (libro == null)
             {
