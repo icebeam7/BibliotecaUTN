@@ -2,6 +2,7 @@
 using BibliotecaUTN.Models;
 using BibliotecaUTN.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,9 @@ namespace BibliotecaUTN.Areas.Identity
                 services.AddDefaultIdentity<BibliotecaUTNUser>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
-                }).AddEntityFrameworkStores<BibliotecaIdentityContext>();
+                })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<BibliotecaIdentityContext>();
 
                 services.AddAuthentication().AddFacebook(facebookOptions =>
                 {

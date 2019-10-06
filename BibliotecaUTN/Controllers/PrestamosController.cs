@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BibliotecaUTN.Context;
 using BibliotecaUTN.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaUTN.Controllers
 {
@@ -151,6 +152,7 @@ namespace BibliotecaUTN.Controllers
         // POST: Prestamos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var prestamo = await _context.Prestamos.FindAsync(id);

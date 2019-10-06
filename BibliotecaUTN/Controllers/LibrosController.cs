@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,15 +7,22 @@ using Microsoft.EntityFrameworkCore;
 using BibliotecaUTN.Context;
 using BibliotecaUTN.Models;
 
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+
 namespace BibliotecaUTN.Controllers
 {
     public class LibrosController : Controller
     {
+        private IHostingEnvironment _env;
+
         private readonly BibliotecaContext _context;
 
-        public LibrosController(BibliotecaContext context)
+        public LibrosController(BibliotecaContext context, IHostingEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: Libros
@@ -46,6 +52,7 @@ namespace BibliotecaUTN.Controllers
                 return NotFound();
             }
 
+            libro.Portada = DescargarImagen(libro.Imagen);
             return View(libro);
         }
 
@@ -63,10 +70,11 @@ namespace BibliotecaUTN.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdLibro,ISBN,Titulo,IdEditorial,IdGenero,IdPais,Año,Imagen")] Libro libro)
+        public async Task<IActionResult> Create([Bind("IdLibro,ISBN,Titulo,IdEditorial,IdGenero,IdPais,Año,Imagen")] Libro libro, IFormFile portada)
         {
             if (ModelState.IsValid)
             {
+                libro.Imagen = await GuardarArchivo(portada);
                 libro.IdLibro = Guid.NewGuid();
                 _context.Add(libro);
                 await _context.SaveChangesAsync();
@@ -76,6 +84,34 @@ namespace BibliotecaUTN.Controllers
             ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
             ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             return View(libro);
+        }
+
+        async Task<string> GuardarArchivo(IFormFile imagen, string archivo = "")
+        {
+            if (imagen == null || imagen.Length == 0)
+                return string.Empty;
+
+            if (string.IsNullOrWhiteSpace(archivo))
+                archivo = $"{Guid.NewGuid()}{Path.GetExtension(imagen.FileName)}";
+
+            var ruta = Path.Combine(_env.WebRootPath, "Libros", archivo);
+
+            using (var stream = new FileStream(ruta, FileMode.Create))
+            {
+                await imagen.CopyToAsync(stream);
+            }
+
+            return archivo;
+        }
+
+        public string DescargarImagen(string imagen)
+        {
+            if (imagen == null)
+                return string.Empty;
+
+            var ruta = Path.Combine(_env.WebRootPath, "Libros", imagen);
+            var bytes = System.IO.File.ReadAllBytes(ruta);
+            return "data:image/png;base64," + Convert.ToBase64String(bytes);
         }
 
         // GET: Libros/Edit/5
@@ -95,6 +131,8 @@ namespace BibliotecaUTN.Controllers
             ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
             ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
+
+            libro.Portada = DescargarImagen(libro.Imagen);
             return View(libro);
         }
 
@@ -103,7 +141,7 @@ namespace BibliotecaUTN.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("IdLibro,ISBN,Titulo,IdEditorial,IdGenero,IdPais,Año,Imagen")] Libro libro)
+        public async Task<IActionResult> Edit(Guid id, [Bind("IdLibro,ISBN,Titulo,IdEditorial,IdGenero,IdPais,Año,Imagen")] Libro libro, IFormFile portada)
         {
             if (id != libro.IdLibro) return NotFound();
 
@@ -111,6 +149,7 @@ namespace BibliotecaUTN.Controllers
             {
                 try
                 {
+                    libro.Imagen = await GuardarArchivo(portada, libro.Imagen);
                     _context.Update(libro);
                     await _context.SaveChangesAsync();
                 }
@@ -125,6 +164,8 @@ namespace BibliotecaUTN.Controllers
             ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
             ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
+
+            libro.Portada = DescargarImagen(libro.Imagen);
             return View(libro);
         }
 
@@ -153,6 +194,8 @@ namespace BibliotecaUTN.Controllers
             ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
             ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
+
+            libro.Portada = DescargarImagen(libro.Imagen);
             return View("Edit", libro);
         }
 
@@ -173,6 +216,8 @@ namespace BibliotecaUTN.Controllers
             ViewData["IdGenero"] = new SelectList(_context.Generos, "IdGenero", "Nombre", libro.IdGenero);
             ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nombre", libro.IdPais);
             ViewData["Autores"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
+
+            libro.Portada = DescargarImagen(libro.Imagen);
             return View("Edit", libro);
         }
 
@@ -196,6 +241,7 @@ namespace BibliotecaUTN.Controllers
                 return NotFound();
             }
 
+            libro.Portada = DescargarImagen(libro.Imagen);
             return View(libro);
         }
 

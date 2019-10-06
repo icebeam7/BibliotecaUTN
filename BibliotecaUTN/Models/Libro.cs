@@ -8,6 +8,9 @@ namespace BibliotecaUTN.Models
     [Table("tbl_Libro")]
     public class Libro
     {
+        [NotMapped]
+        public string Portada { get; set; }
+
         [Key]
         public Guid IdLibro { get; set; }
 
